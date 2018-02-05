@@ -1,9 +1,21 @@
-:- initialization(main).
-main :- write('Hello World!'), nl, halt.
-anne_is_female.     /* anne is a female */
-john_is_male.     /* john is a male */
-michael_is_male.
-mary_is_female.
-jessica_is_female.
+/* :- initialization(main). */
+/* main :- write('Hello World!'), nl, halt. */
+male(john).
+male(michael).
+male(adam).
+female(anne).
+female(jessica).
+female(mary).
 
-?-michael_is_male.
+is_spouse(anne, john).
+is_spouse(michael, jessica).
+
+is_mother(anne, michael).
+is_father(john, michael).
+is_mother(anne, mary).
+is_father(john, mary).
+is_mother(jessicam, adam).
+is_father(michael, adam).
+
+is_brother(michael, mary).
+is_sister(mary, michael).
