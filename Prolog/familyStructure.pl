@@ -1,0 +1,9 @@
+:- initialization(main).
+main :- write('Hello World!'), nl, halt.
+anne_is_female.     /* anne is a female */
+john_is_male.     /* john is a male */
+michael_is_male.
+mary_is_female.
+jessica_is_female.
+
+?-michael_is_male.
