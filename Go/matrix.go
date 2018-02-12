@@ -12,14 +12,22 @@ for the numbers (i.e. 1 is “one”).*/
 func main() {
 	//declaring 2d slice
 	matrix := createMatrix()
+	//print matrix
 	printMatrix(matrix)
+	//transpose matrix
 	transposed := transposeMatrix(matrix)
+	//prints transposed matrix
 	printMatrix(transposed)
+	//converts matrix to list
 	list := convertMatrix(transposed)
+	//prints list
 	fmt.Println(list)
+	//sorts list
 	sort.Ints(list)
+	//prints sorted list
 	fmt.Println(list)
-
+	//prints the sorted list in English words
+	printWords(list)
 }
 
 func createMatrix() [5][5]int {
@@ -63,5 +71,7 @@ func printMatrix(matrix [5][5]int) {
 
 func printWords(list []int) {
 	strings := []string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine"}
-
+	for i := 0; i < 25; i++ {
+		fmt.Println(strings[list[i]-1])
+	}
 }
