@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	inputBytes, err := ioutil.ReadFile("raven.txt") // just pass the file name
+	inputBytes, err := ioutil.ReadFile("metro.txt") // just pass the file name
 	if err != nil {
 		fmt.Print(err)
 	}
