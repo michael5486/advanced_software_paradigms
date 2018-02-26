@@ -3,13 +3,37 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"regexp"
 	"sort"
+	"strconv"
 	"strings"
 )
 
 func main() {
-	inputBytes, err := ioutil.ReadFile("metro.txt") // just pass the file name
+
+	num_args := len(os.Args)
+
+	if num_args < 3 {
+		fmt.Println("Please enter the correct arguments: filename and ngram_len.")
+		os.Exit(3)
+	}
+
+	filename := os.Args[1]
+	ngram_len, err := strconv.Atoi(os.Args[2]) //convert string argument into int
+
+	if ngram_len < 2 || ngram_len > 5 {
+		fmt.Println("Please enter an ngram_len of size 2-5.")
+		os.Exit(3)
+	}
+
+	// fmt.Println(num_args)
+	// fmt.Println(filename)
+	// fmt.Println(ngram_len)
+
+	inputBytes, err := ioutil.ReadFile(filename) // just pass the file name
+
+	//print errors from user parsing
 	if err != nil {
 		fmt.Print(err)
 	}
@@ -29,7 +53,7 @@ func main() {
 
 	//iterate over all words in file
 	for i := range splitWords {
-		processWord(splitWords[i], ngramMap)
+		processWord(splitWords[i], ngramMap, ngram_len)
 
 	}
 
@@ -38,70 +62,90 @@ func main() {
 	nGramAboveThresh(10, ngramMap) //shows the nGrams if they have more than input number of appearances
 }
 
-func processWord(word string, wordMap map[string]int) {
+func processWord(word string, wordMap map[string]int, nGramType int) {
 	//fmt.Println(word)
 	length := len(word)
 	//fmt.Println(length)
 
-	//bigrams
-	for i := 0; i < length-1; i += 2 {
-		// fmt.Println(word[i:i+2])
-		addGramToMap(word[i:i+2], wordMap)
-	}
-	for i := 1; i < length-1; i += 2 {
-		// fmt.Println(word[i:i+2])
-		addGramToMap(word[i:i+2], wordMap)
-	}
-	//trigrams
-	for i := 0; i < length-2; i += 3 {
-		// fmt.Println(word[i:i+3])
-		addGramToMap(word[i:i+3], wordMap)
-	}
-	for i := 1; i < length-2; i += 3 {
-		// fmt.Println(word[i:i+3])
-		addGramToMap(word[i:i+3], wordMap)
-	}
-	for i := 2; i < length-2; i += 3 {
-		addGramToMap(word[i:i+3], wordMap)
-		// fmt.Println(word[i:i+3])
-	}
-	//4-grams
-	for i := 0; i < length-3; i += 4 {
-		// fmt.Println(word[i:i+4])
-		addGramToMap(word[i:i+4], wordMap)
-	}
-	for i := 1; i < length-3; i += 4 {
-		// fmt.Println(word[i:i+4])
-		addGramToMap(word[i:i+4], wordMap)
-	}
-	for i := 2; i < length-3; i += 4 {
-		// fmt.Println(word[i:i+4])
-		addGramToMap(word[i:i+4], wordMap)
-	}
-	for i := 3; i < length-3; i += 4 {
-		// fmt.Println(word[i:i+4])
-		addGramToMap(word[i:i+4], wordMap)
-	}
-	//5-grams
-	for i := 0; i < length-4; i += 5 {
-		// fmt.Println(word[i:i+5])
-		addGramToMap(word[i:i+5], wordMap)
-	}
-	for i := 1; i < length-4; i += 5 {
-		// fmt.Println(word[i:i+5])
-		addGramToMap(word[i:i+5], wordMap)
-	}
-	for i := 2; i < length-4; i += 5 {
-		// fmt.Println(word[i:i+5])
-		addGramToMap(word[i:i+5], wordMap)
-	}
-	for i := 3; i < length-4; i += 5 {
-		// fmt.Println(word[i:i+5])
-		addGramToMap(word[i:i+5], wordMap)
-	}
-	for i := 4; i < length-4; i += 5 {
-		// fmt.Println(word[i:i+5])
-		addGramToMap(word[i:i+5], wordMap)
+	switch nGramType {
+
+	case 2:
+		{ //bigrams
+			for i := 0; i < length-1; i += 2 {
+				// fmt.Println(word[i:i+2])
+				addGramToMap(word[i:i+2], wordMap)
+			}
+			for i := 1; i < length-1; i += 2 {
+				// fmt.Println(word[i:i+2])
+				addGramToMap(word[i:i+2], wordMap)
+			}
+		}
+
+	case 3:
+		{ //trigrams
+			for i := 0; i < length-2; i += 3 {
+				// fmt.Println(word[i:i+3])
+				addGramToMap(word[i:i+3], wordMap)
+			}
+			for i := 1; i < length-2; i += 3 {
+				// fmt.Println(word[i:i+3])
+				addGramToMap(word[i:i+3], wordMap)
+			}
+			for i := 2; i < length-2; i += 3 {
+				addGramToMap(word[i:i+3], wordMap)
+				// fmt.Println(word[i:i+3])
+			}
+		}
+
+	case 4:
+		{ //4-grams
+			for i := 0; i < length-3; i += 4 {
+				// fmt.Println(word[i:i+4])
+				addGramToMap(word[i:i+4], wordMap)
+			}
+			for i := 1; i < length-3; i += 4 {
+				// fmt.Println(word[i:i+4])
+				addGramToMap(word[i:i+4], wordMap)
+			}
+			for i := 2; i < length-3; i += 4 {
+				// fmt.Println(word[i:i+4])
+				addGramToMap(word[i:i+4], wordMap)
+			}
+			for i := 3; i < length-3; i += 4 {
+				// fmt.Println(word[i:i+4])
+				addGramToMap(word[i:i+4], wordMap)
+			}
+		}
+
+	case 5:
+		{ //5-grams
+			for i := 0; i < length-4; i += 5 {
+				// fmt.Println(word[i:i+5])
+				addGramToMap(word[i:i+5], wordMap)
+			}
+			for i := 1; i < length-4; i += 5 {
+				// fmt.Println(word[i:i+5])
+				addGramToMap(word[i:i+5], wordMap)
+			}
+			for i := 2; i < length-4; i += 5 {
+				// fmt.Println(word[i:i+5])
+				addGramToMap(word[i:i+5], wordMap)
+			}
+			for i := 3; i < length-4; i += 5 {
+				// fmt.Println(word[i:i+5])
+				addGramToMap(word[i:i+5], wordMap)
+			}
+			for i := 4; i < length-4; i += 5 {
+				// fmt.Println(word[i:i+5])
+				addGramToMap(word[i:i+5], wordMap)
+			}
+		}
+
+	default:
+		{
+			fmt.Println("Please enter an ngram_len of size 2-5.")
+			os.Exit(3)
+		}
 	}
 }
 
